@@ -28,3 +28,8 @@ jobs:
             **SHA1:** `${{ steps.sha1.outputs.sha1 }}`
 
             server.properties:
+              resource-pack=${{ github.server_url }}/${{ github.repository }}/releases/download/v${{ github.run_number }}/pack.zip
+              resource-pack-sha1=${{ steps.sha1.outputs.sha1 }}
+
+
+          files: pack.zip
