@@ -1,0 +1,30 @@
+name: Release Resource Pack
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: zip -r pack.zip . -x ".git/*" ".github/*" "README*" "LICENSE*" "*.md"
+
+      - id: sha1
+        run: echo "sha1=$(sha1sum pack.zip | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Build ${{ github.run_number }}
+          body: |
+            Commit: ${{ github.sha }}
+
+            **SHA1:** `${{ steps.sha1.outputs.sha1 }}`
+
+            server.properties:
